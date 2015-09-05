@@ -101,6 +101,7 @@ class Common{
             {
                 $path[$count-1] = str_replace('thumb2_','',$path[$count-1]);
             }
+            
     		$filename = "thumb1_".$path[$count-1];
     		$path[$count-1] = $filename;
     		$path = implode('/',$path);
