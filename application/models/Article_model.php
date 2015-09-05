@@ -6,7 +6,7 @@ class Article_model extends CI_Model {
     {
         parent::__construct();
     }
-	
+
     /**
      * 把文章的信息插入到数据库
      */
@@ -28,7 +28,7 @@ class Article_model extends CI_Model {
         {
             return FALSE;
         }
-        
+
         return $this->db->insert_id();
     }
 
@@ -60,7 +60,7 @@ class Article_model extends CI_Model {
      * @param  string  $order [排序]
      * @return [type]         [description]
      */
-    public function get_article_list($page = 0, $meid = NULL, $uid = NULL, $type = NULL, $pid = NULL, $limit = 6, $order = "id DESC")
+    public function get_article_list($page = 0, $meid = NULL, $uid = NULL, $type = NULL, $pid = NULL, $tag = NULL, $limit = 6, $order = "id DESC")
     {
         $query = $this->db
             ->select('article.id, article.uid, article.title, article.content, article.like, article.read')
@@ -73,15 +73,19 @@ class Article_model extends CI_Model {
         }
         if( ! empty($uid))
         {
-            $query = $query->where('article.uid',$uid);
+            $query = $query->where('article.uid', $uid);
         }
         if( ! empty($type))
         {
-            $query = $query->where('article.type',$type);
+            $query = $query->where('article.type', $type);
         }
         if( ! empty($pid))
         {
-          $query = $query->like('pids',"|{$pid}|");
+          $query = $query->like('pids', "|{$pid}|");
+        }
+        if( ! empty($tag))
+        {
+            $query = $query->like('tag', "|{$tag}|");
         }
         $query =$query->order_by($order)->limit($limit, $page*$limit)->get()->result_array();
         return $query;
@@ -94,9 +98,9 @@ class Article_model extends CI_Model {
                           ->where($where)
                           ->get()
                           ->row_array();
-                          
+
         if(!empty($query)){
-            $query[$field['name']]=(int)$query[$field['name']]+(int)$field['amount'];     
+            $query[$field['name']]=(int)$query[$field['name']]+(int)$field['amount'];
             $this->db->where($where)->update('article',$query);
             return $this->db->affected_rows() === 1;
         }
@@ -119,7 +123,7 @@ class Article_model extends CI_Model {
     	$table_name = $this->db->protect_identifiers('article', TRUE);
     	$this->db->query("UPDATE {$table_name} SET {$table_name}.`like` = {$table_name}.`like` + 1 WHERE {$table_name}.id = {$aid}");
     }
-    
+
     /**
      * 取消点赞时，文章的 like 减一
      */
@@ -144,20 +148,20 @@ class Article_model extends CI_Model {
      */
     public function delete_article($aid, $uid = NULL)
     {
-        $where = array();   
+        $where = array();
         $where['id'] = $aid;
         if( ! empty($uid))
         {
             $where['uid'] = $uid;
         }
         $this->db->delete('article',$where);
-        return $this->db->affected_rows() === 1;        
+        return $this->db->affected_rows() === 1;
     }
 
     public function delete_article_by_uid($uid)
     {
         $this->db->delete('article',array('uid' => $uid));
-        return $this->db->affected_rows() > 0;           
+        return $this->db->affected_rows() > 0;
     }
 
     /**
@@ -176,8 +180,8 @@ class Article_model extends CI_Model {
       }
       $this->db->where('id', $aid)
                ->update('article',$arr);
-      return $this->db->affected_rows() === 1;                  
-    }   
+      return $this->db->affected_rows() === 1;
+    }
 
 
 

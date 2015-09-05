@@ -19,10 +19,12 @@ class Main extends MY_Controller {
         $page = $this->sc->input('page');
         // $page = 0;
 
+        $tag = $this->sc->input('tag', 'get');
+
         $uid  = isset($this->user['id']) ? $this->user['id'] : NULL;
         //文章类型
         $type= $this->sc->input('type');
-        $article = $this->article_service->get_article_list($page,$uid,$type);
+        $article = $this->article_service->get_article_list($page, $uid, $type, $tag);
         echo json_encode($article);
     }
 
@@ -41,7 +43,6 @@ class Main extends MY_Controller {
             'jquery.js',
             'masonry.pkgd.min.js',
             'jquery.imageloader.js',
-            'jquery.scrollLoading.js',
             'jquery.pageslide.min.js'
         );
 

@@ -41,10 +41,26 @@ var GET_CART_GOODS = BASE_URL + 'cart/main/get_good_list';
 //艺术品点赞
 var VOTE_PRODUCTION = BASE_URL + 'production/detail/like_production';
 
+//专题页面
+var TOPIC_URL = BASE_URL + 'topic';
+
 /**
  * [trim 去掉字符串前后两端的空格]
  */
 function trim(str)
 {
     return str.replace(/(^\s*)|(\s*$)/g, "");
+}
+
+/**
+ * 获取url上get的参数
+ * @param name
+ * @returns {null}
+ */
+function getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null)
+        return r[2];
+    return null;
 }

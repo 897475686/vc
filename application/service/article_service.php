@@ -6,13 +6,13 @@ class Article_service extends MY_Service{
     {
         parent::__construct();
         $this->load->model('article_model');
-        $this->load->model('article_comment_model');   
+        $this->load->model('article_comment_model');
         $this->load->model('article_like_model');
         $this->load->model('user_model');
         $this->load->model('notification_model');
     }
-    
-    
+
+
     /**
      * 发表文章
      */
@@ -34,7 +34,7 @@ class Article_service extends MY_Service{
     /**
      * [get_article_list 获取文章列表]
      */
-    public function get_article_list($page, $uid, $type)
+    public function get_article_list($page, $uid, $type, $tag)
     {
         switch ($type) {
             case 'article':
@@ -48,20 +48,20 @@ class Article_service extends MY_Service{
                 break;
         }
 
-        $article = $this->article_model->get_article_list($page, $uid, NULL,$type);
+        $article = $this->article_model->get_article_list($page, $uid, NULL, $type, NULL, $tag);
         foreach( $article as $key => $value )
-        {        
-                         
+        {
+
             //对每篇文章内容进行字数截取
             $article[$key]['content'] = Common::extract_article($article[$key]['id'], $article[$key]['title'], $article[$key]['content']);
-            
+
             //对文章标题字数截取
             $article[$key]['content']["sort_title"] = mb_strlen($article[$key]['content']["article_title"]) > 9 ? mb_substr($article[$key]['content']["article_title"], 0, 9).'..' : $article[$key]['content']["article_title"];
-            
+
             //查询作者的信息
             //$article[$key]['author'] = $this->user_model->get_user_base_id($article[$key]['uid']);
             unset($article[$key]['id']);
-            unset($article[$key]['title']); 
+            unset($article[$key]['title']);
             //unset($article[$key]['uid']);
         }
         return $article;
@@ -87,11 +87,11 @@ class Article_service extends MY_Service{
     public function get_comment_by_aid($aid)
     {
         $query = $this->article_comment_model->get_comment_by_aid($aid);
-        
+
         foreach ($query as $key => $value) {
-            $query[$key]['user'] = $this->user_model->get_user_base_id($query[$key]['uid']); 
+            $query[$key]['user'] = $this->user_model->get_user_base_id($query[$key]['uid']);
         }
-        
+
         return $query;
     }
 
@@ -100,7 +100,7 @@ class Article_service extends MY_Service{
     {
         $this->article_model->read_article($aid);
     }
-    
+
 
     /**
      * [vote_article 点赞]
@@ -130,18 +130,18 @@ class Article_service extends MY_Service{
                 if($status['status'] == 0)
                 {
                     //文章的 like 数减一
-                    $this->article_model->disargee_article($aid);                   
+                    $this->article_model->disargee_article($aid);
                 }
                 else
                 {
                      //更新文章的 like 数加一
-                    $this->article_model->argee_article($aid);                   
+                    $this->article_model->argee_article($aid);
                 }
             }
 
     	}
         //失败
-    	else 
+    	else
     	{
             $this->error->output('INVALID_REQUEST');
     	}
@@ -168,7 +168,7 @@ class Article_service extends MY_Service{
         $insert_result = $this->article_comment_model->insert_comment($aid, $uid, $pid, $comment);
         if($insert_result)
         {
-            echo json_encode(array('success' => 0,'script' => 'location.reload();'));       
+            echo json_encode(array('success' => 0,'script' => 'location.reload();'));
             //如果是回复评论
             if( ! empty($pid))
             {
@@ -176,8 +176,8 @@ class Article_service extends MY_Service{
                 $c = $this->article_comment_model->get_comment_by_id($pid);
                 if( ! empty($c) && $c['uid'] != $uid)
                 {
-                    $this->notification_model->insert($uid, $c['uid'],2,json_encode(array('content_id' => $aid, 'comment_content' => $comment)));               
-                }                
+                    $this->notification_model->insert($uid, $c['uid'],2,json_encode(array('content_id' => $aid, 'comment_content' => $comment)));
+                }
             }
 
         }
@@ -192,7 +192,7 @@ class Article_service extends MY_Service{
     public function get_vote_person_by_aid($aid)
     {
         $users = $this->article_like_model->get_vote_person_by_aid($aid);
-        
+
         foreach ($users as $key => $value)
         {
             $users[$key]['user'] = $this->user_model->get_user_base_id($users[$key]['uid']);
@@ -200,7 +200,7 @@ class Article_service extends MY_Service{
         }
         return $users;
     }
-    
+
     /**
      * [update_article 更新文章]
      * @param  [type] $aid [文章id]
@@ -212,7 +212,7 @@ class Article_service extends MY_Service{
         $arr = array(
             'title'    => $article_title,
             'type'     => $article_type,
-            'pids'     => $pids,  
+            'pids'     => $pids,
             'content'  => $article_content,
             'modify_by'=> $uid
         );

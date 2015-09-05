@@ -126,8 +126,8 @@
                 <!-- END 评论部分 -->
             </div>
         </div>
-        <?php echo $footer; ?>
     </div>
+    <?php echo $footer; ?>
 </div>
 </body>
 <script>

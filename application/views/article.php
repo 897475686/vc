@@ -3,49 +3,35 @@
     <?php echo $top; ?>
     <div class="container">
         <div class="article-list" id="article-list">
-            <!--             <div class="menu" id="nav">
-                            <div class="btn select">全部</div>
-                            <div class="btn select">风格</div>
-                            <div class="btn select">目的</div>
-                            <div class="btn select">价格</div>
-                        </div> -->
-            <!--
-    <div class="container" id="vi_container">
 
-        <div class="content">
-            <div class="article-list" id="article-list">
-                <div class="menu">
-                    <div class="btn select">全部</div>
-                    <div class="btn select">风格</div>
-                    <div class="btn select">目的</div>
-                    <div class="btn select">价格</div>
+<!--            <div class="box">-->
+<!--                <img class="image"-->
+<!--                     src="http://hanzh.oss-cn-shenzhen.aliyuncs.com/public/upload/20150820/thumb1_14400058514902.jpg"-->
+<!--                     alt=""/>-->
+<!---->
+<!--                <p class="title">标题：我的世界</p>-->
+<!---->
+<!--                <p class="content">这是一段介绍因为爱爱爱爱爱爱爱爱啊啊这是-->
+<!--                    一段介绍因为爱爱爱爱爱爱爱爱啊啊这是一段介绍因为爱爱爱爱爱爱爱爱啊啊-->
+<!--                    这是一段介绍因为爱爱爱爱爱爱爱爱啊啊dasfdasfdasfdasfdasfda-->
+<!--                    sfdasfssfffffffffffffdsafdasfdasfdasfdasfdasfdasfdasf-->
+<!--                </p>-->
+<!---->
+<!--                <div class="bottom">-->
+<!--                    <div class="like">-->
+<!--                        <span>199</span>-->
+<!--                        <div class="icon like"></div>-->
+<!--                    </div>-->
+<!--                    <div class="read">-->
+<!--                        <span>2000</span>-->
+<!--                        <i class="fa fa-eye"></i>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
 
-                </div>
-                <!-- <div class="box">
-                    <div class="ishadow">
-                        <img class="image" src="<?= base_url() ?>public/img/load.gif" data-src="img/1 (1).jpg" alt=""/>
-                        <div class="shadow"><i class="fa fa-eye"></i></div>
-                    </div>
-                    <p class="title">标题：我的世界</p>
-                    <p class="content">这是一段介绍因为爱爱爱爱爱爱爱爱啊啊这是
-                        一段介绍因为爱爱爱爱爱爱爱爱啊啊这是一段介绍因为爱爱爱爱爱爱爱爱啊啊
-                        这是一段介绍因为爱爱爱爱爱爱爱爱啊啊dasfdasfdasfdasfdasfda
-                        sfdasfssfffffffffffffdsafdasfdasfdasfdasfdasfdasfdasf
-                    </p>
-                    <div class="bottom clearfix">
-                        <div class="like">
-                            <i class="fa fa-heart"></i>
-                            <span>199</span>
-                        </div>
-                        <div class="read">
-                            <i class="fa fa-eye"></i>
-                            <span>2000</span>
-                        </div>
-                        <div class="btn read" onclick="readArticle(id)">阅读详情</div>
-                    </div>
-                </div> -->
         </div>
     </div>
+    <?=$footer?>
 </div>
 </body>
 <script>
@@ -84,7 +70,7 @@
         var count = 0;
         var sum = 0;
 
-        function LoadMore() {
+                function LoadMore() {
             $.ajax({
                 type: 'POST',
                 url: GET_ARTICLE_URL,
@@ -117,7 +103,26 @@
                         var read = items[i].read;
 
 
-                        var box = $('<div class="box"><div class="ishadow" onclick="readArticle(' + article_id + ')"><img class="image" id="img_load_' + page + '" src="<?=base_url()?>public/img/load.gif" data-src="' + img + '" data-url="' + img + '"/><div class="shadow"><i class="fa fa-eye"></i></div></div><p class="title">' + article_title + '</p><p class="content">' + article_content + '</p><div class="bottom clearfix"><div class="like"><i class="fa fa-heart"></i><span>' + like + '</span></div><div class="read"><i class="fa fa-eye"></i><span>' + read + '</span></div><div class="btn read" onclick="readArticle(' + article_id + ')">阅读详情</div></div></div>');
+                        var box = $('<div class="box">' +
+                            '<img class="image"' +
+                        'src="'+ img +'"' +
+                        'alt=""/>' +
+
+                            '<p class="title">'+article_title+'</p>' +
+
+                        '<p class="content">' + article_content +'</p>' +
+
+                        '<div class="bottom">' +
+                            '<div class="like">' +
+                            '<span>'+like+'</span>' +
+                            '<div class="icon like"></div>' +
+                            '</div>' +
+                            '<div class="read">' +
+                            '<span>'+read+'</span>' +
+                            '<i class="fa fa-eye"></i>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>');
                         $container.append(box);
                         masonry.appended(box);
 
